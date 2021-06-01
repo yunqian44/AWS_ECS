@@ -63,45 +63,39 @@ output "ecs_task_definition_revision" {
 }
 
 output "iam_role_arn" {
-  value = module.ecs_fargate.iam_role_arn
-}
-
-output "iam_role_create_date" {
-  value = module.ecs_fargate.iam_role_create_date
-}
-
-output "iam_role_unique_id" {
-  value = module.ecs_fargate.iam_role_unique_id
+  value = aws_iam_role.default.arn
 }
 
 output "iam_role_name" {
-  value = module.ecs_fargate.iam_role_name
+  value = aws_iam_role.default.name
 }
 
-output "iam_role_description" {
-  value = module.ecs_fargate.iam_role_description
+output "iam_policy_ecs_task_execution_id" {
+  value = aws_iam_policy.ecs_task_execution.id
 }
 
-output "iam_policy_id" {
-  value = module.ecs_fargate.iam_policy_id
+output "iam_policy_ecs_task_execution_arn" {
+  value = aws_iam_policy.ecs_task_execution.arn
+}
+output "iam_policy_ecs_task_execution_name" {
+  value = aws_iam_policy.ecs_task_execution.name
 }
 
-output "iam_policy_arn" {
-  value = module.ecs_fargate.iam_policy_arn
+output "iam_policy_ecs_task_execution_path" {
+  value = aws_iam_policy.ecs_task_execution.path
+}
+# ----------  ---------- #
+output "iam_policy_ecr_auth_id" {
+  value = aws_iam_policy.ecr_auth.id
 }
 
-output "iam_policy_description" {
-  value = module.ecs_fargate.iam_policy_description
+output "iam_policy_ecr_auth_arn" {
+  value = aws_iam_policy.ecr_auth.arn
+}
+output "iam_policy_ecr_auth_name" {
+  value = aws_iam_policy.ecr_auth.name
 }
 
-output "iam_policy_name" {
-  value = module.ecs_fargate.iam_policy_name
-}
-
-output "iam_policy_path" {
-  value = module.ecs_fargate.iam_policy_path
-}
-
-output "iam_policy_document" {
-  value = module.ecs_fargate.iam_policy_document
+output "iam_policy_ecr_auth_path" {
+  value = aws_iam_policy.ecr_auth.path
 }
