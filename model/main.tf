@@ -1,7 +1,7 @@
 provider "aws" {
   region     = "ap-northeast-1"
-  access_key = "AKIA2C2TL65XXXXXXXXXXXXXXX"
-  secret_key = "20HhR85jLx2l8QXXXXXXXXXXXXXXXXXXXX"
+  access_key = "AKIA2C2TL65VXXXXXX"
+  secret_key = "Rgax8RY7fSii73NNwGXHAXXXXXX"
 }
 
 locals {
@@ -19,35 +19,35 @@ module "securitygroup" {
   security_group_name    = "cnbateblogwebCluster_ecs_securitygroup"
   security_group_vpc_id  = module.vpc.vpc_id
 
-  from_port_ingress = 80
-  to_port_ingress   = 80
+  from_port_ingress = 9021
+  to_port_ingress   = 9021
 
   from_port_egress = 0
   to_port_egress   = 0
 }
 
-module "codedeploy" {
-  source                     = "../modules/codedeploy"
-  name                       = "example-deploy"
-  ecs_cluster_name           = local.name
-  ecs_service_name           = local.service_name
-  lb_listener_arns           = [module.alb.http_alb_listener_blue_arn]
-  blue_lb_target_group_name  = module.alb.aws_lb_target_group_blue_name
-  green_lb_target_group_name = module.alb.aws_lb_target_group_green_name
+# module "codedeploy" {
+#   source                     = "../modules/codedeploy"
+#   name                       = "example-deploy"
+#   ecs_cluster_name           = local.name
+#   ecs_service_name           = local.service_name
+#   lb_listener_arns           = [module.alb.http_alb_listener_blue_arn]
+#   blue_lb_target_group_name  = module.alb.aws_lb_target_group_blue_name
+#   green_lb_target_group_name = module.alb.aws_lb_target_group_green_name
 
-  auto_rollback_enabled            = true
-  auto_rollback_events             = ["DEPLOYMENT_FAILURE"]
-  action_on_timeout                = "STOP_DEPLOYMENT"
-  wait_time_in_minutes             = 1440
-  termination_wait_time_in_minutes = 1440
-  test_traffic_route_listener_arns = []
-  iam_path                         = "/service-role/"
-  description                      = "This is example"
+#   auto_rollback_enabled            = true
+#   auto_rollback_events             = ["DEPLOYMENT_FAILURE"]
+#   action_on_timeout                = "STOP_DEPLOYMENT"
+#   wait_time_in_minutes             = 1440
+#   termination_wait_time_in_minutes = 1440
+#   test_traffic_route_listener_arns = []
+#   iam_path                         = "/service-role/"
+#   description                      = "This is example"
 
-  tags = {
-    Environment = "prod"
-  }
-}
+#   tags = {
+#     Environment = "prod"
+#   }
+# }
 
 module "ecs_fargate" {
   source           = "../modules/ecs"
@@ -81,7 +81,7 @@ module "ecs_fargate" {
   desired_count                      = 1
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 100
-  deployment_controller_type         = "CODE_DEPLOY"
+  deployment_controller_type         = "ECS"
   assign_public_ip                   = true
   health_check_grace_period_seconds  = 10
   platform_version                   = "LATEST"
