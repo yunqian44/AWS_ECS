@@ -165,7 +165,7 @@ resource "aws_lb_target_group" "aws_lb_target_group_blue" {
   # The port on which the targets receive traffic.
   # This port is used unless you specify a port override when registering the target.
   # https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_CreateTargetGroup.html
-  port = var.target_group_port
+  port = var.target_group_blue_port
 
   # The protocol to use for routing traffic to the targets.
   # For Application Load Balancers, the supported protocols are HTTP and HTTPS.
@@ -253,7 +253,7 @@ resource "aws_lb_target_group" "aws_lb_target_group_green" {
   # The port on which the targets receive traffic.
   # This port is used unless you specify a port override when registering the target.
   # https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_CreateTargetGroup.html
-  port = var.target_group_port
+  port = var.target_group_green_port
 
   # The protocol to use for routing traffic to the targets.
   # For Application Load Balancers, the supported protocols are HTTP and HTTPS.

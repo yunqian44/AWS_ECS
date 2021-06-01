@@ -131,11 +131,18 @@ variable "fixed_response_status_code" {
   description = "The HTTP response code. Valid values are 2XX, 4XX, or 5XX."
 }
 
-variable "target_group_port" {
+variable "target_group_blue_port" {
   default     = "80"
   type        = string
   description = "The port on which targets receive traffic, unless overridden when registering a specific target."
 }
+
+variable "target_group_green_port" {
+  default     = "8080"
+  type        = string
+  description = "The port on which targets receive traffic, unless overridden when registering a specific target."
+}
+
 
 variable "target_group_protocol" {
   default     = "HTTP"
@@ -246,25 +253,25 @@ variable "enabled" {
 }
 
 variable "enabled_lb_target_group_blue" {
-  default     = true
+  default = true
 }
 
 variable "enabled_lb_target_group_green" {
-  default     = false
+  default = false
 }
 
 variable "enable_http_listener_blue" {
-  default     = true
+  default = true
 }
 
 variable "enable_http_listener_green" {
-  default     = false
+  default = false
 }
 
 variable "enable_http_listener_rule_blue" {
-  default     = true
+  default = true
 }
 
 variable "enable_http_listener_rule_green" {
-  default     = false
+  default = false
 }
