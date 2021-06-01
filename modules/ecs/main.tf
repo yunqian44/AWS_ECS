@@ -107,7 +107,7 @@ resource "aws_ecs_task_definition" "default" {
   family = var.name
 
   # The ARN of the task execution role that the Amazon ECS container agent and the Docker daemon can assume.
-  execution_role_arn = var.create_ecs_task_execution_role ? join("", aws_iam_role.default.*.arn) : var.ecs_task_execution_role_arn
+  execution_role_arn = var.ecs_task_execution_role_arn
 
   # A list of container definitions in JSON format that describe the different containers that make up your task.
   # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#container_definitions
@@ -135,57 +135,4 @@ resource "aws_ecs_task_definition" "default" {
 
   # A mapping of tags to assign to the resource.
   tags = merge({ "Name" = var.name }, var.tags)
-}
-
-# ECS Task Execution IAM Role
-#
-# https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_execution_IAM_role.html
-
-# https://www.terraform.io/docs/providers/aws/r/iam_role.html
-resource "aws_iam_role" "default" {
-  count = local.enabled_ecs_task_execution
-
-  name               = local.iam_name
-  assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
-  path               = var.iam_path
-  description        = var.description
-  tags               = merge({ "Name" = local.iam_name }, var.tags)
-}
-
-data "aws_iam_policy_document" "assume_role_policy" {
-  statement {
-    actions = ["sts:AssumeRole"]
-
-    principals {
-      type        = "Service"
-      identifiers = ["ecs-tasks.amazonaws.com"]
-    }
-  }
-}
-
-# https://www.terraform.io/docs/providers/aws/r/iam_policy.html
-resource "aws_iam_policy" "default" {
-  count = local.enabled_ecs_task_execution
-
-  name        = local.iam_name
-  policy      = data.aws_iam_policy.ecs_task_execution.policy
-  path        = var.iam_path
-  description = var.description
-}
-
-# https://www.terraform.io/docs/providers/aws/r/iam_role_policy_attachment.html
-resource "aws_iam_role_policy_attachment" "default" {
-  count = local.enabled_ecs_task_execution
-
-  role       = aws_iam_role.default[0].name
-  policy_arn = aws_iam_policy.default[0].arn
-}
-
-locals {
-  iam_name                   = "${var.name}-ecs-task-execution"
-  enabled_ecs_task_execution = var.enabled ? 1 : 0 && var.create_ecs_task_execution_role ? 1 : 0
-}
-
-data "aws_iam_policy" "ecs_task_execution" {
-  arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
