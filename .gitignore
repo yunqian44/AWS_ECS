@@ -1,0 +1,5 @@
+model/.terraform.lock.hcl
+model/terraform.tfstate
+model/terraform.tfstate.backup
+model/.terraform/modules/modules.json
+model/.terraform/providers/registry.terraform.io/hashicorp/aws/2.70.0/windows_amd64/terraform-provider-aws_v2.70.0_x4.exe
