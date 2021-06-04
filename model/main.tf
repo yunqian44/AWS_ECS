@@ -1,13 +1,13 @@
 provider "aws" {
   region     = "ap-northeast-1"
-  access_key = "AKIA2C2TL65VXXXXXX"
-  secret_key = "Rgax8RY7fSii73NNwGXHAXXXXXX"
+  access_key = "AKIA2C2TL65XXXXX"
+  secret_key = "soNz77mvnSCIQjdJAESPEOn0XXXXXX"
 }
 
 locals {
-  container_name = "example_Test"
+  container_name = "cnbateblogweb"
   name           = "cnbateblogwebCluster"
-  service_name   = "k8s_net_demo"
+  service_name   = "cnbateblogwebservice"
   http_port      = ["80"]
   cidr_block     = "10.255.0.0/16"
   container_port = tonumber(module.alb.alb_target_group_blue_port)
@@ -63,16 +63,16 @@ module "ecs_fargate" {
   container_definitions = jsonencode([
     {
       name      = local.container_name
-      image     = "693275195242.dkr.ecr.ap-northeast-1.amazonaws.com/cnbateblogweb:28"
+      image     = "693275195242.dkr.ecr.ap-northeast-1.amazonaws.com/cnbateblogweb:28" #"693275195242.dkr.ecr.ap-northeast-1.amazonaws.com/cnbateblogweb:28" #"docker.io/yunqian44/cnbateblogweb:laster"
       essential = true
       environment = [
-        { name : "Location", value : "Singapore" }
+        { name : "Location", value : "Singapore" },
+        { name : "ASPNETCORE_ENVIRONMENT", value : "Production" }
       ]
       portMappings = [
         {
           containerPort = local.container_port
           protocol      = "tcp"
-          hostPort      = local.container_port
         }
       ]
     }
@@ -129,28 +129,6 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution" {
   policy_arn = aws_iam_policy.ecs_task_execution.arn
 }
 
-resource "aws_iam_policy" "ecr_auth" {
-  name   = "iam-pol-rol-ecr"
-  policy = data.aws_iam_policy_document.ecr_auth.json
-}
-
-data "aws_iam_policy_document" "ecr_auth" {
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "ecr:*",
-    ]
-
-    resources = ["*"]
-  }
-}
-
-resource "aws_iam_role_policy_attachment" "ecs_ecr_auth" {
-  role       = aws_iam_role.default.name
-  policy_arn = aws_iam_policy.ecr_auth.arn
-}
-
 module "alb" {
   source                     = "../modules/elb"
   name                       = "elb-cnbateblogweb"
@@ -160,9 +138,9 @@ module "alb" {
   enable_http_listener       = true
   enable_deletion_protection = false
 
-  enabled_lb_target_group_blue  = true
-  aws_lb_target_group_blue_name = "elb-cnbateblogweb-blue"
-
+  enabled_lb_target_group_blue   = true
+  aws_lb_target_group_blue_name  = "elb-cnbateblogweb-blue"
+  health_check_path              = ""
   enabled_lb_target_group_green  = true
   aws_lb_target_group_green_name = "elb-cnbateblogweb-green"
 
@@ -173,10 +151,9 @@ module "alb" {
 
 
   enable_http_listener_green      = true
-  http_port_green                 = 8000
+  http_port_green                 = 8080
   target_group_green_port         = 8080
   enable_http_listener_rule_green = true
-
 }
 
 module "vpc" {

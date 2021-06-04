@@ -84,18 +84,3 @@ output "iam_policy_ecs_task_execution_name" {
 output "iam_policy_ecs_task_execution_path" {
   value = aws_iam_policy.ecs_task_execution.path
 }
-# ----------  ---------- #
-output "iam_policy_ecr_auth_id" {
-  value = aws_iam_policy.ecr_auth.id
-}
-
-output "iam_policy_ecr_auth_arn" {
-  value = aws_iam_policy.ecr_auth.arn
-}
-output "iam_policy_ecr_auth_name" {
-  value = aws_iam_policy.ecr_auth.name
-}
-
-output "iam_policy_ecr_auth_path" {
-  value = aws_iam_policy.ecr_auth.path
-}
