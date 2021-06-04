@@ -1,7 +1,14 @@
 provider "aws" {
-  region     = "ap-northeast-1"
-  access_key = "AKIA2C2TL65XXXXX"
-  secret_key = "soNz77mvnSCIQjdJAESPEOn0XXXXXX"
+  region = "ap-northeast-1"
+}
+
+terraform {
+  backend "s3" {
+    region  = "ap-northeast-1"
+    profile = "default"
+    bucket  = "cnbateterraformstorage"
+    key     = "cnbate.terraform.stats"
+  }
 }
 
 locals {
