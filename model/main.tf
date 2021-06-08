@@ -6,8 +6,6 @@ terraform {
   backend "s3" {
     region  = "ap-northeast-1"
     profile = "default"
-    bucket  = "cnbateterraformstorage"
-    key     = "cnbate.terraform.stats"
   }
 }
 
